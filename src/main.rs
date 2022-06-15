@@ -1,17 +1,17 @@
-use std::fs;
 use std::env;
+use std::fs;
 extern crate colored;
 extern crate fstream;
 extern crate walkdir;
 use colored::*;
 use std::path::Path;
 use walkdir::WalkDir;
-const DIRS:[&str; 5] = [
+const DIRS: [&str; 5] = [
     "C:\\Users\\mazav\\OneDrive\\Documents\\PDF",
     "C:\\ZIP",
     "C:\\installation",
     "C:\\Users\\mazav\\OneDrive\\Images\\SVG",
-    "C:\\Users\\mazav\\OneDrive\\Images", 
+    "C:\\Users\\mazav\\OneDrive\\Images",
 ];
 
 fn main() {
@@ -27,7 +27,6 @@ fn main() {
         } else {
             println!("Unknown argument");
         }
-
     } else if args.len() > 3 {
         println!("Too many arguments");
     }
@@ -36,7 +35,11 @@ fn main() {
 fn search_string(args: Vec<String>) {
     let path = &".".to_string();
     let string = &args[2];
-    println!("Searching for {} in {}", string.green().bold(), path.italic());
+    println!(
+        "Searching for {} in {}",
+        string.green().bold(),
+        path.italic()
+    );
     check_dir(path, string);
 }
 
@@ -46,7 +49,11 @@ fn search_file(args: Vec<String>) {
         for path in paths {
             let patha = path.unwrap().path();
             let file_name = patha.file_name().unwrap().to_str().unwrap();
-            if file_name.contains(&args[2]) || file_name.contains(&args[2].to_lowercase()) || file_name.contains(&args[2].to_uppercase()) || file_name.contains(&title(&args[2])) {
+            if file_name.contains(&args[2])
+                || file_name.contains(&args[2].to_lowercase())
+                || file_name.contains(&args[2].to_uppercase())
+                || file_name.contains(&title(&args[2]))
+            {
                 println!("{:?}", patha.display());
             }
         }
@@ -84,7 +91,6 @@ fn check_dir(path: &str, query: &str) {
         "Total scanned files {}",
         total_files_scanned.to_string().bold()
     );
-
 }
 
 fn check_file(file_path: &Path, query: &str) {
@@ -92,7 +98,7 @@ fn check_file(file_path: &Path, query: &str) {
         "In file {}\n",
         file_path.display().to_string().magenta().italic()
     );
-    
+
     match fstream::read_lines(file_path) {
         Some(lines) => {
             for (pos, line) in &mut lines.iter().enumerate() {
@@ -102,7 +108,6 @@ fn check_file(file_path: &Path, query: &str) {
                     print!("{}", "Line ".green().bold());
                     print!("{0: <6} ", pos.to_string().cyan());
                     println!("=> {}", line.blue());
-                     
                 }
             }
         }
